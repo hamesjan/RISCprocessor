@@ -1,0 +1,18 @@
+Outer_loop:
+	mov r6, r0
+	add r0, r0
+    beq R4, R0, end_program
+	brc_comp
+	mov r4 r0
+    Ld R2, R0
+       
+Inner_loop:
+	mov r6, r0
+	add r0, r0
+    Beq r5, r0, inc_outer_loop
+	brc_comp
+	mov r5, r0
+    Ld R3, R0
+        
+compare_pairs:
+	Xor r3 r2

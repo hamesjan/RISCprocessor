@@ -1,9 +1,10 @@
+import re
 def encode_instruction(instruction):
 
 
     parts = instruction.split()
     opcode = parts[0].lower()
-    # print(parts)
+    print(parts)
 
     if opcode == 'ld':
         reg1 = int(parts[1][1])
@@ -32,6 +33,7 @@ def encode_instruction(instruction):
     elif opcode == 'cnt_bits':
         return f'0101101{int(parts[1][1]):02b}'
     elif opcode == 'brc_jump':
+
         return f'1000{int(parts[1][1:]):05b}'
     elif opcode == 'jump':
 
@@ -61,7 +63,9 @@ def encode_instruction(instruction):
         return '100000000'  # Assuming 'brc_comp' has a fixed encoding
 
     else:
-        raise ValueError(f"Unknown instruction: {instruction}")
+
+        print("Error instructions: ", instruction)
+        raise ValueError(f"Unknown instruction: {opcode}")
 
 line_counter = 0
 
@@ -69,7 +73,8 @@ def assemble_code(assembly_code):
     global line_counter
     machine_code = []
     for instruction in assembly_code.splitlines():
-        instruction = instruction.strip()
+
+        instruction = re.sub(r'^[\t \x80-\xFF]+', '', instruction)
         if instruction:
             if instruction.endswith(':'):
                 print(instruction[:-1], " starting at instruction memory: ", line_counter)
@@ -89,11 +94,17 @@ def write_machine_code(file_path, machine_code):
         for code in machine_code:
             file.write(code + '\n')
 
+def translate(input_file_name, output_file_name):
+    assembly_code = read_assembly_file(input_file_name)
+    machine_code = assemble_code(assembly_code)
+    write_machine_code(output_file_name, machine_code)
 
 if __name__ == "__main__":
     assembly_file = 'sample_assembly.txt'
     output_file = 'output.txt'
+    translate(assembly_file, output_file)
+    translate("p1assembly.txt", "generated_machine_code_p1.txt")
 
-    assembly_code = read_assembly_file(assembly_file)
-    machine_code = assemble_code(assembly_code)
-    write_machine_code(output_file, machine_code)
+    # assembly_code = read_assembly_file(assembly_file)
+    # machine_code = assemble_code(assembly_code)
+    # write_machine_code(output_file, machine_code)

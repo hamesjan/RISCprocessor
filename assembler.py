@@ -1,14 +1,18 @@
 def encode_instruction(instruction):
+
+
     parts = instruction.split()
     opcode = parts[0].lower()
-    print(parts)
+    # print(parts)
 
     if opcode == 'ld':
         reg1 = int(parts[1][1])
         reg2 = int(parts[2][1])
         return f'0000{reg1:03b}{reg2:02b}'
     elif opcode == 'str':
-        return ""
+        reg1 = int(parts[1][1])
+        reg2 = int(parts[2][1])
+        return f'0001{reg1:02b}{reg2:03b}'
     elif opcode == 'xor':
         reg1 = int(parts[1][1])
         reg2 = int(parts[2][1])
@@ -22,34 +26,56 @@ def encode_instruction(instruction):
         reg2 = int(parts[2][1])
         return f'01010{reg1:02b}{reg2:02b}'
     elif opcode == 'sign':
-        return ""
+        return f'0101100{int(parts[1][1]):02b}'
     elif opcode == 'flip_bit':
-        return ""
-# LEFT OFF HERE
+        return f'0101110{int(parts[1][1]):02b}'
+    elif opcode == 'cnt_bits':
+        return f'0101101{int(parts[1][1]):02b}'
+    elif opcode == 'brc_jump':
+        return f'1000{int(parts[1][1:]):05b}'
+    elif opcode == 'jump':
+
+        return f'1001{int(parts[1][1:]):05b}'
+    elif opcode == 'blt':
+        return f'101{int(parts[1][1]):03b}{int(parts[2][1]):03b}'
+    elif opcode == 'beq':
+        reg1 = int(parts[1][1])
+        reg2 = int(parts[2][1])
+        return f'110{reg1:03b}{reg2:03b}'
     elif opcode == 'mov':
         reg1 = int(parts[1][1])
         reg2 = int(parts[2][1])
         return f'001{reg1:03b}{reg2:03b}'
-
-    elif opcode == 'beq':
+    elif opcode == 'shift_left':
+        return f'0110{int(parts[1][1]):02b}{int(parts[2]):03b}'
+    elif opcode == 'shift_right':
+        return f'0111{int(parts[1][1]):02b}{int(parts[2]):03b}'
+    elif opcode == 'addi':
+         return f'1110{int(parts[1][1]):02b}{int(parts[2][1]):03b}'
+    
+    elif opcode == 'subi':
         reg1 = int(parts[1][1])
-        reg2 = int(parts[2][1])
-        return f'110_{reg1:03b}_{reg2:03b}'
-
+        immediate = int(parts[2][1])
+        return f'1111{reg1:02b}{immediate:03b}'
     elif opcode == 'brc_comp':
-        return '100_0_00000'  # Assuming 'brc_comp' has a fixed encoding
+        return '100000000'  # Assuming 'brc_comp' has a fixed encoding
 
     else:
         raise ValueError(f"Unknown instruction: {instruction}")
 
+line_counter = 0
 
 def assemble_code(assembly_code):
+    global line_counter
     machine_code = []
     for instruction in assembly_code.splitlines():
         instruction = instruction.strip()
-        # Ignore empty lines and labels
-        if instruction and not instruction.endswith(':'):
-            machine_code.append(encode_instruction(instruction))
+        if instruction:
+            if instruction.endswith(':'):
+                print(instruction[:-1], " starting at instruction memory: ", line_counter)
+            else:
+                machine_code.append(encode_instruction(instruction))
+                line_counter += 1
     return machine_code
 
 

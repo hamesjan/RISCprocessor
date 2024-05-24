@@ -1,3 +1,35 @@
+str r0 r7
+str r3 r0
+ld r0 r3
+ld r7 r0
+xor r3 r0
+xor r0 r3
+add r0 r3
+sub r3 r0
+sub r0 r3
+sign r0
+sign r3
+flip_bit r0
+flip_bit r3
+cnt_bits r0
+cnt_bits r3
+brc_jump #0
+brc_jump #31
+jump #31
+jump #0
+blt r7 r0
+blt r0 r7
+beq r7 r0
+beq r0 r7
+mov r0 r7
+mov r7 r0
+shift_left r3 7
+shift_right r3 7
+addi r3 #7
+addi r0 #0
+subi r3 #7
+subi r0 #0
+xor r0 R3
 Outer_loop:
 	mov r6, r0
 	add r0, r0
@@ -5,7 +37,6 @@ Outer_loop:
 	brc_comp
 	mov r4 r0
     Ld R2, R0
-       
 Inner_loop:
 	mov r6, r0
 	add r0, r0

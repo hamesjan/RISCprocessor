@@ -3,7 +3,7 @@ module Top(
 		       reset, 
   output logic done);
 
-  wire[5:0] Jump,
+  wire[11:0] Jump,
 	        PC;
   wire[2:0] Ra,
 			Rb,

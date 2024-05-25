@@ -4,7 +4,7 @@ def encode_instruction(instruction):
 
     parts = instruction.split()
     opcode = parts[0].lower()
-    print(parts)
+    # print(parts)
 
     if opcode == 'ld':
         reg1 = int(parts[1][1])
@@ -67,15 +67,16 @@ def encode_instruction(instruction):
         print("Error instructions: ", instruction)
         raise ValueError(f"Unknown instruction: {opcode}")
 
-line_counter = 0
+
 
 def assemble_code(assembly_code):
-    global line_counter
+    line_counter = 0
     machine_code = []
     for instruction in assembly_code.splitlines():
 
         instruction = re.sub(r'^[\t \x80-\xFF]+', '', instruction)
         if instruction:
+
             if instruction.endswith(':'):
                 print(instruction[:-1], " starting at instruction memory: ", line_counter)
             else:
@@ -100,10 +101,12 @@ def translate(input_file_name, output_file_name):
     write_machine_code(output_file_name, machine_code)
 
 if __name__ == "__main__":
-    assembly_file = 'sample_assembly.txt'
-    output_file = 'output.txt'
-    translate(assembly_file, output_file)
+    # assembly_file = 'sample_assembly.txt'
+    # output_file = 'output.txt'
+    # translate(assembly_file, output_file)
     translate("p1assembly.txt", "generated_machine_code_p1.txt")
+
+    # translate("p2assembly.txt", "generated_p2.txt")
 
     # assembly_code = read_assembly_file(assembly_file)
     # machine_code = assemble_code(assembly_code)

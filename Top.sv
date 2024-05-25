@@ -34,12 +34,8 @@ assign  DatA = RdatA;
 assign  DatB = RdatB; 
 assign  WdatR = Rslt;
   
- always_comb begin 
-   if(PC == 50)begin
-     done = 1;
-   end
-     
-  end 
+assign done = PC == 58 ? 1 : 0;
+ 
 
 JLUT JL1(
   .Jptr,

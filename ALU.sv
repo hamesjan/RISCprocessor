@@ -12,8 +12,11 @@ module ALU(
   logic signed [2:0] signed_imm;
 
 always_comb begin
-  Rslt = 8'b0;
-  SCo  = 8'b0;
+  Rslt = 8'b00000000;
+  SCo  = 1'b0;
+  Jen = 1'b0;
+  signed_imm = 3'b000;
+  
   case(Aluop)
     4'b0000: {SCo,Rslt} = DatA ^ DatB;   // xor
     4'b0001: {SCo,Rslt} = DatA + DatB; // add
@@ -29,8 +32,8 @@ always_comb begin
     4'b0101: begin                      
         Rslt = 0; 
         for (int i = 0; i < 8; i++) begin
-          if (DatA[i]) begin
-            Rslt++;
+          if (DatA[i] == 1) begin
+            Rslt = Rslt + 1;
           end
         end
       end
@@ -39,7 +42,7 @@ always_comb begin
     end else begin
             Jen = 0;
     end 
-    4'b0111: if(DatA < DatB) begin 
+    4'b0111: if(DatA == DatB) begin 
             Jen = 1;
     end else begin
             Jen = 0;
@@ -58,6 +61,15 @@ always_comb begin
     {SCo,Rslt} = DatA + Imm;
     4'b1011:
     {SCo,Rslt} = DatA - Imm;
+	 4'b1100: {SCo, Rslt} = DatA + Imm;
+	 4'b1101:{SCo, Rslt} = DatA + Imm;
+	 4'b1110:{SCo, Rslt} = DatA + Imm;
+	 4'b1111:{SCo, Rslt} = DatA + Imm;
+	 default: begin
+	 SCo = 1'b0;
+	 Rslt = 8'b0;
+	 Jen = 1'b0;
+	 end
   endcase
 end
 

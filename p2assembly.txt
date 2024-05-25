@@ -1,0 +1,189 @@
+outer_loop:
+    blt r4 r1, outer_loop_end 
+    mov r1 r2
+    Addi r2 #2    line8
+    Addi r4 #2 
+    inner_loop:
+        blt r4 r2   l10
+        brc_jump inner_end
+        ld r0 r1
+        ld r3 r2
+        sign r0 
+        sign r3
+        beq r0 r3
+        brc_jump same_sign
+
+
+        //line 23 sign_different
+        blt r0 r3 
+        brc_jump left_neg
+        addi r2 #1
+        ld r3 r2
+        flip_bit r3
+        addi r3 #1  
+        subi r2 #1
+        ld r0 r2
+        flip_bit r0
+        addi r0 #0 //for overflow flag, MSB for arr[index_right]
+        mov r0 r5 //temp store msb
+        addi r1 #1  //line29
+        ld r0 r1 //r0 = LSB of index_left
+        add r3 r0  
+        mov r5 r0 //r0 is the MSB for right
+        mov r3 r5 //r5 is now LSB result
+        subi r1 #1
+        ld r3 r1 //MSB for left
+        add r0 r3 //r0 MSB result
+        mov r5 r3
+        addi r2
+
+
+        jump comp_min_max
+
+
+        left_neg:
+
+
+            addi r1 #1
+            ld r3 r1
+            flip_bit r3
+            addi r3 #1  
+            subi r1 #1
+            ld r0 r1
+            flip_bit r0
+            addi r0 #0 //for overflow flag, MSB for arr[index_right]
+            mov r0 r5 //temp store msb
+            addi r2 #1  //
+            ld r0 r2
+            add r3 r0  
+            mov r5 r0 //
+            mov r3 r5 //r5 is now LSB result
+            subi r2 #1
+            ld r3 r2 //
+            add r0 r3 //r0 MSB result
+            mov r5 r3
+            addi r2 #2
+            jump comp_min_max
+
+
+
+
+        same_sign:
+            ld r0 r1
+            ld r3 r2
+            beq r0 r3 //line 12
+            brc_jump equal
+
+
+            blt r3 r0
+            brc_jump compare_left_greater_right
+
+
+            //else line20
+            addi r2 #1
+            add r1 #1
+            ld r0 r1
+            ld r3 r2
+            sub r3 r0
+            mov r3 r5
+            subi r1 #1
+            subi r2 #1
+            ld r0 r1
+            ld r3 r2
+            sub r3 r0
+            mov r3 r0
+            mov r5 r3
+            addi r2 #2
+            jump comp_min_max
+            
+            equal:
+                addi r1 #1
+                addi r2 #1
+                ld r0 r1
+                ld r3 r2
+                blt r3 r0
+                brc_jump  rll
+            
+                rll:
+                    sub r0 r3  //line 14
+                    mov r0 r3
+                    sub r0 r0 //so that r0 is 0
+                    addi r2 #1 //so that index right += 2 is handle(i line36)
+                    subi r1 #1  //change index_left back to original state
+                    jump comp_min_max
+
+
+            compare_left_greater_right: //line 17
+                addi r1 #1
+                addi r2 #1
+                ld r3 r2
+                ld r0 r1
+                sub r0 r3 //line18
+                mov r0 r5 //r5 temp store LSB of different
+                subi r1 #1
+                subi r2 #1
+                ld r0 r1
+                ld r3 r2
+                sub r0 r3
+                mov r5 r3
+                addi r2 2
+                jump comp_min_max
+ 
+    comp_min_max:
+
+
+        addi r4 #4 //r4=66
+        ld r5 r4
+        blt r5 r0 
+        addi r4 #2
+        brc_jump check_max
+        subi r4 #2   
+        beq r5 r0
+        brc_jump msb_equal
+        str r0 r4
+        addi r4 #1 //r4=67
+        str r3 r4
+        addi r4 #1
+        jump check_max
+
+
+        msb_equal:
+            addi r4 #1 //r4=67
+            ld r5 r4
+            blt r5 r3
+            addi r4 #1
+            brc_jump check_max
+            subi r4 #1
+            str r3 r4
+            addi r4 #1
+            jump inner_loop
+
+
+        check_max: //r4 68
+
+
+            ld r5 r4
+            blt r0 r5
+            subi r4 #8
+            brc_jump check_max
+            addi r4 #8   
+            beq r5 r0
+            brc_jump msb_equal
+            str r0 r4
+            addi r4 #1 //r4=67
+            str r3 r4
+            subi r4 #7
+            jump inner_loop
+
+
+            msb_equal:
+                addi r4 #1 //r4=69
+                ld r5 r4
+                blt r3 r5
+                subi r4 #9
+                brc_jump inner_loop
+                addi r4 #9
+                str r3 r4
+                addi r4 #9
+                jump inner_loop
+outer_loop_end:

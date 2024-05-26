@@ -18,6 +18,16 @@ module Ctrl(
   // 000_000_000
   
   always_comb begin
+	Aluop = 4'b0000;
+	Jptr = 5'b00000;
+	Ra = 3'b000;
+	Rb = 3'b000;
+	Wd = 3'b000;
+	Imm = 3'b000;
+	WenR = 1'b0;
+	WenD = 1'b0;
+	Ldr = 1'b0;
+	Str = 1'b0;
 case(mach_code[8:6]) 
     3'b000: begin // Load/Store
       Ldr = !mach_code[5]; 
@@ -57,18 +67,23 @@ case(mach_code[8:6])
        
     end
   3'b100: begin //  Jump (brc_jump, jump)
-      if (mach_code[5] == 1'b1) begin
+     if (mach_code[5] == 1'b1) begin
         Jptr = mach_code[4:0];  // regular jump
       end else begin
-        if (Jen) begin
+        if (Jen)begin
           Jptr = mach_code[4:0]; // brc_jmp
+        end
         end
           
       end
-    end
+      
+    //   Jptr = mach_code[4:0]; // brc_jmp
+
+    
   	3'b101: begin // blt
       Ra = mach_code[5:3];   
       Rb = mach_code[2:0];
+    
       Aluop = 4'b0110;
       end 
     3'b110: begin // beq
@@ -77,7 +92,8 @@ case(mach_code[8:6])
       Aluop = 4'b0111;
      end 
   	3'b001: begin // mov
-      Ra = mach_code[5:3]; 
+      Ra = mach_code[5:3];
+      Rb = mach_code[2:0];
       Wd = mach_code[2:0]; 
       WenR = 1'b1;          
       Aluop = 4'b1000;
@@ -97,6 +113,8 @@ case(mach_code[8:6])
       Imm = mach_code[2:0];
       WenR = 1'b1;            // Enable register write
     end
+	 
+	 
 endcase
   end
 endmodule

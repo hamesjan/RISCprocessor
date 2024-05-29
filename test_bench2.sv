@@ -1,5 +1,5 @@
 // program 2    CSE141L   min & max arithmetic distances in double precision data pairs
-module test_bench;
+module test_bench2;
 
 // connections to DUT: clock, start (request), done (acknowledge) 
   bit  clk,
@@ -13,8 +13,8 @@ module test_bench;
   logic signed[15:0] Tmp[32];	      // caches all 16-bit values
   logic signed[16:0] diff;		      // signed difference -- Dist = abs(diff)
 
-  DUT D1(.clk  (clk  ),	              // your design goes here
-		 .start(start),
+  Top D1(.clk  (clk  ),	              // your design goes here
+		 .reset(start),
 		 .done (done )); 
 
   always begin
@@ -28,6 +28,9 @@ module test_bench;
 // first operand = {data_mem[0],data_mem[1]}  
 //   endian order doesn't matter for program 1, as long as consistent for all values (why?)
     #100ns;
+	D1.RF1.Core[1] = 0;
+	D1.RF1.Core[4] = 60;
+	
 	Min = 'hffff;						     // start test bench Min at max value
 	Max = 'h0;						         // start test bench Max at min value
     for(int i=0; i<32; i++) begin
@@ -41,7 +44,7 @@ module test_bench;
     for(int r=68; r<256; r++)
 	  D1.dm.core[r] = 'd0;		             // preset DUT final Max to min possible 
 // 	compute correct answers
-    for(int j=0; j<32; j++) begin			 // triangular half of 32x32 matrix, minus the major diagonal
+    for(int j=0; j<32; j++) begin	 		 // triangular half of 32x32 matrix, minus the major diagonal
       for(int k=j+1; k<32; k++) begin		 // steps through all 2-different-element combinations (not permutations)
 	    #1ns Dist = abs(Tmp[j],Tmp[k]);		 // call abs subroutine, which computes magnitude of difference between two values
         if(Dist<Min) begin                   // update arithmetic minimum
@@ -62,13 +65,13 @@ module test_bench;
 // check results in data_mem[66:67] and [68:69] (Minimum and Maximum distances, respectively)
     if(Min == {D1.dm.core[66],D1.dm.core[67]}) 
                               $display("good Min = %d",Min);     // your DUT put correct answer into core[66:67]
-	else                      $display("fail Min = %d",Min);	 // your DUT put wrong answer into core[66:67]
+	else                      $display("expected Min = %d, Mine is %d",Min,{D1.dm.core[66],D1.dm.core[67]});	 // your DUT put wrong answer into core[66:67]
                               $display("Min addr = %d, %d",Min1, Min2);
 							  $display("Min valu = %d %d",Tmp[Min1], Tmp[Min2]);
 							  //{D1.dm.core[2*Min1],D1.dm.core[2*Min1+1]},{D1.dm.core[2*Min2],D1.dm.core[2*Min2+1]});
 	if(Max == {D1.dm.core[68],D1.dm.core[69]}) 
 	                          $display("good Max = %d",Max);	 // your DUT put correct answer into core[68:69]
-	else                      $display("MAD  Max = %d",Max);	 // your DUT put wrong answer into core[68:69]
+	else                      $display("MAD  Max = %d, Mine is %d",Max, {D1.dm.core[68],D1.dm.core[69]});	 // your DUT put wrong answer into core[68:69]
 	                          $display("Max pair = %d, %d",Max1, Max2);
 							  $display("Max valu = %d, %d",Tmp[Max1], Tmp[Max2]);
 							  //{D1.dm.core[2*Max1],D1.dm.core[2*Max1+1]},{D1.dm.core[2*Max2],D1.dm.core[2*Max2+1]});

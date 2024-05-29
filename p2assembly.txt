@@ -1,22 +1,24 @@
 outer_loop:
-    blt r4 r1, outer_loop_end 
+    blt r4 r1
+    brc_jump #12 
     mov r1 r2
-    Addi r2 #2    line8
-    Addi r4 #2 
+    Addi r2 #2
+    mov R2 R7
+    mov r4 r2   
+    Addi r2 #2
+    mov r2 r4
+    mov r7 r2
     inner_loop:
         blt r4 r2   l10
-        brc_jump inner_end
+        brc_jump #11
         ld r0 r1
         ld r3 r2
         sign r0 
         sign r3
         beq r0 r3
-        brc_jump same_sign
-
-
-        //line 23 sign_different
+        brc_jump #3
         blt r0 r3 
-        brc_jump left_neg
+        brc_jump #2
         addi r2 #1
         ld r3 r2
         flip_bit r3
@@ -24,26 +26,22 @@ outer_loop:
         subi r2 #1
         ld r0 r2
         flip_bit r0
-        addi r0 #0 //for overflow flag, MSB for arr[index_right]
-        mov r0 r5 //temp store msb
-        addi r1 #1  //line29
-        ld r0 r1 //r0 = LSB of index_left
+        addi r0 #0
+        mov r0 r5
+        addi r1 #1  
+        ld r0 r1 
         add r3 r0  
-        mov r5 r0 //r0 is the MSB for right
-        mov r3 r5 //r5 is now LSB result
+        mov r5 r0 
+        mov r3 r5
         subi r1 #1
-        ld r3 r1 //MSB for left
-        add r0 r3 //r0 MSB result
+        ld r3 r1 
+        add r0 r3
         mov r5 r3
-        addi r2
-
-
-        jump comp_min_max
+        addi r2 #2
+        jump #7
 
 
         left_neg:
-
-
             addi r1 #1
             ld r3 r1
             flip_bit r3
@@ -51,19 +49,19 @@ outer_loop:
             subi r1 #1
             ld r0 r1
             flip_bit r0
-            addi r0 #0 //for overflow flag, MSB for arr[index_right]
-            mov r0 r5 //temp store msb
-            addi r2 #1  //
+            addi r0 #0 
+            mov r0 r5
+            addi r2 #1 
             ld r0 r2
             add r3 r0  
-            mov r5 r0 //
-            mov r3 r5 //r5 is now LSB result
+            mov r5 r0
+            mov r3 r5 
             subi r2 #1
-            ld r3 r2 //
-            add r0 r3 //r0 MSB result
+            ld r3 r2 
+            add r0 r3 
             mov r5 r3
             addi r2 #2
-            jump comp_min_max
+            jump #7
 
 
 
@@ -71,15 +69,13 @@ outer_loop:
         same_sign:
             ld r0 r1
             ld r3 r2
-            beq r0 r3 //line 12
-            brc_jump equal
+            beq r0 r3 
+            brc_jump #4
 
 
             blt r3 r0
-            brc_jump compare_left_greater_right
+            brc_jump #6
 
-
-            //else line20
             addi r2 #1
             add r1 #1
             ld r0 r1
@@ -94,7 +90,7 @@ outer_loop:
             mov r3 r0
             mov r5 r3
             addi r2 #2
-            jump comp_min_max
+            jump #7
             
             equal:
                 addi r1 #1
@@ -102,49 +98,45 @@ outer_loop:
                 ld r0 r1
                 ld r3 r2
                 blt r3 r0
-                brc_jump  rll
-            
+                brc_jump  #5
                 rll:
-                    sub r0 r3  //line 14
+                    sub r0 r3  
                     mov r0 r3
-                    sub r0 r0 //so that r0 is 0
-                    addi r2 #1 //so that index right += 2 is handle(i line36)
-                    subi r1 #1  //change index_left back to original state
-                    jump comp_min_max
+                    sub r0 r0 
+                    addi r2 #1 
+                    subi r1 #1  
+                    jump #7
 
 
-            compare_left_greater_right: //line 17
+            compare_left_greater_right:
                 addi r1 #1
                 addi r2 #1
                 ld r3 r2
                 ld r0 r1
-                sub r0 r3 //line18
-                mov r0 r5 //r5 temp store LSB of different
+                sub r0 r3 
+                mov r0 r5 
                 subi r1 #1
                 subi r2 #1
                 ld r0 r1
                 ld r3 r2
                 sub r0 r3
                 mov r5 r3
-                addi r2 2
-                jump comp_min_max
- 
+                addi r2 #2
+                jump #7
     comp_min_max:
-
-
-        addi r4 #4 //r4=66
+        addi r4 #4
         ld r5 r4
         blt r5 r0 
         addi r4 #2
-        brc_jump check_max
+        brc_jump #9
         subi r4 #2   
         beq r5 r0
-        brc_jump msb_equal
+        brc_jump #8
         str r0 r4
-        addi r4 #1 //r4=67
+        addi r4 #1 
         str r3 r4
         addi r4 #1
-        jump check_max
+        jump #9
 
 
         msb_equal:
@@ -152,28 +144,28 @@ outer_loop:
             ld r5 r4
             blt r5 r3
             addi r4 #1
-            brc_jump check_max
+            brc_jump #9
             subi r4 #1
             str r3 r4
             addi r4 #1
-            jump inner_loop
+            jump #1
 
 
-        check_max: //r4 68
+        check_max:
 
 
             ld r5 r4
             blt r0 r5
             subi r4 #8
-            brc_jump check_max
+            brc_jump #9
             addi r4 #8   
             beq r5 r0
-            brc_jump msb_equal
+            brc_jump #8
             str r0 r4
             addi r4 #1 //r4=67
             str r3 r4
             subi r4 #7
-            jump inner_loop
+            jump #1
 
 
             msb_equal:
@@ -181,9 +173,12 @@ outer_loop:
                 ld r5 r4
                 blt r3 r5
                 subi r4 #9
-                brc_jump inner_loop
+                brc_jump #1
                 addi r4 #9
                 str r3 r4
                 addi r4 #9
-                jump inner_loop
+                jump #1
+    inner_end:
+        addi r1 #2
+        jump #0
 outer_loop_end:

@@ -6,8 +6,8 @@ module InstROM(
 
   initial 
     //$readmemb("mach_code_prog_1.txt",Core);
-     $readmemb("generated_machine_code_p1.txt",Core);
-
+     //$readmemb("generated_machine_code_p1.txt",Core);
+     $readmemb("machine_p2.txt",Core);
   always_comb mach_code = Core[PC];
 
 endmodule

@@ -104,9 +104,10 @@ if __name__ == "__main__":
     # assembly_file = 'sample_assembly.txt'
     # output_file = 'output.txt'
     # translate(assembly_file, output_file)
-    translate("p1assembly.txt", "generated_machine_code_p1.txt")
+    # translate("p1assembly.txt", "generated_machine_code_p1.txt")
 
     # translate("p2assembly.txt", "generated_p2.txt")
+    translate("unit_test.txt", "str_test.txt")
 
     # assembly_code = read_assembly_file(assembly_file)
     # machine_code = assemble_code(assembly_code)

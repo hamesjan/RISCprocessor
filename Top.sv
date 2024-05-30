@@ -28,6 +28,7 @@ module Top(
 			WenR,		 // RF write enable
 			WenD,		 // DM write enable
 			Ldr,		 // LOAD
+ 			Brc_J,
 			Str;		 // STORE
 
 assign  DatA = RdatA;
@@ -46,6 +47,7 @@ ProgCtr PC1(
   .reset,
   .Jen,
   .Jump,
+  .Brc_J,
   .PC);
 
 InstROM IR1(
@@ -75,7 +77,8 @@ RegFile RF1(
   .Wd,
   .Wdat(WdatR),
   .RdatA,
-  .RdatB
+  .RdatB,
+  .Rdat
 );
 
 ALU A1(
@@ -87,14 +90,15 @@ ALU A1(
   .Par,
   .SCo,
   .Imm,
+  .Brc_J,
   .Jen
 );
 
 DMem dm(
   .clk,
   .Wen (WenD),
-  .WDat(WdatD),
-  .Addr,
+  .WDat(RdatA),
+  .Addr(RdatB),
   .Rdat);
 
 

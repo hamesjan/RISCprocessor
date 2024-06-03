@@ -1,6 +1,6 @@
 module JLUT(
   input[4:0] Jptr,
-  output logic[11:0] Jump);
+  output logic[5:0] Jump);
 
   always_comb case(Jptr)
     0: Jump = 58;  // end

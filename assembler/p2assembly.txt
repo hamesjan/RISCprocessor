@@ -135,14 +135,12 @@ outer_loop:
         ld r5 r3
         mov r3 r4
         mov r7 r3
-        blt r5 r0
-
         mov r3 r7
         mov r4 r3
         addi r3 #2
         mov r3 r4
         mov r7 r3 
-
+        blt r5 r0
         brc_jump #9
 
         mov r3 r7
@@ -185,13 +183,12 @@ outer_loop:
             mov r7 r3 
 
 
-        
-            blt r5 r3
             mov r3 r7
             mov r4 r3
             addi r3 #1
             mov r3 r4
             mov r7 r3
+            blt r5 r3
             brc_jump #9
             mov r3 r7
             mov r4 r3
@@ -215,15 +212,13 @@ outer_loop:
             ld r5 r3
             mov r3 r4
             mov r7 r3 
-            blt r0 r5
-
             mov r3 r7
             mov r4 r3
             subi r3 #7
             subi r3 #1
             mov r3 r4
             mov r7 r3
-
+            blt r0 r5
             brc_jump #9
 
             mov r3 r7
@@ -232,8 +227,6 @@ outer_loop:
             addi r3 #1
             mov r3 r4
             mov r7 r3
-
-            
 
             beq r5 r0
             brc_jump #8

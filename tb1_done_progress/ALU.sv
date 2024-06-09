@@ -7,7 +7,6 @@ module ALU(
   output logic      Zero,
                     Par,
   					Jen,
-  					Brc_J,
   SCo);
   
   logic signed [2:0] signed_imm;
@@ -16,7 +15,6 @@ always_comb begin
   Rslt = 8'b00000000;
   SCo  = 1'b0;
   Jen = 1'b0;
-  Brc_J = 1'b0;
   signed_imm = 3'b000;
   
   case(Aluop)
@@ -33,21 +31,21 @@ always_comb begin
     4'b0100:  Rslt = ~DatA;   // count bits
     4'b0101: begin                      
         Rslt = 0; 
-      for (int i = 0; i < 9; i++) begin
+        for (int i = 0; i < 8; i++) begin
           if (DatA[i] == 1) begin
             Rslt = Rslt + 1;
           end
         end
       end
-    4'b0110: if(DatA < DatB) begin //blt
-            Brc_J = 0;
+    4'b0110: if(DatA < DatB) begin 
+            Jen = 1;
     end else begin
-            Brc_J = 1;
+            Jen = 0;
     end 
-    4'b0111: if(DatA == DatB) begin  //beq
-            Brc_J = 0;
+    4'b0111: if(DatA == DatB) begin 
+            Jen = 1;
     end else begin
-            Brc_J = 1;
+            Jen = 0;
     end 
     
     4'b1000: Rslt = DatA;
@@ -63,22 +61,14 @@ always_comb begin
     {SCo,Rslt} = DatA + Imm;
     4'b1011:
     {SCo,Rslt} = DatA - Imm;
-	 4'b1100: begin
-       Jen = 1;
-       Brc_J = 0;
-     end
-    4'b1101: begin 
-      Jen = 1; 
-           Brc_J = 0;
-	end
+	 4'b1100: {SCo, Rslt} = DatA + Imm;
+	 4'b1101:{SCo, Rslt} = DatA + Imm;
 	 4'b1110:{SCo, Rslt} = DatA + Imm;
 	 4'b1111:{SCo, Rslt} = DatA + Imm;
 	 default: begin
 	 SCo = 1'b0;
 	 Rslt = 8'b0;
 	 Jen = 1'b0;
-     Brc_J = 0;
-
 	 end
   endcase
 end

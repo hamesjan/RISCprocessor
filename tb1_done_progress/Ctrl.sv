@@ -35,14 +35,13 @@ case(mach_code[8:6])
       
       if (Ldr) begin
         // load address in Ra into Wd register
-        Rb = mach_code[1:0]; // register with address
-        Wd = mach_code[4:2]; // register to load
-        
+        Ra = mach_code[4:2]; 
+        Wd = mach_code[1:0]; 
       end else begin
-		// store value in Rb into address in Wd register
-        Rb = mach_code[2:0]; // register with address
-        Ra = mach_code[4:3]; // register with data
-       end
+		// store value in Ra into address in Wd register
+        Ra = mach_code[4:3]; 
+      	Wd = mach_code[2:0];
+      end
       WenR = Ldr;         
       WenD = Str;       
     end
@@ -57,11 +56,11 @@ case(mach_code[8:6])
       if (mach_code[5:4] == 2'b11) begin
           Ra = mach_code[1:0];
           Wd = mach_code[1:0];
-        if (mach_code[3:2] == 2'b00) begin // sign
+        if (mach_code[3:2] == 2'b00) begin
            Aluop = 4'b0011;
-        end else if (mach_code[3:2] == 2'b10) begin // flip bits
+        end else if (mach_code[3:2] == 2'b10) begin
           Aluop = 4'b0100;
-        end else if (mach_code[3:2] == 2'b01) begin // cnt bits
+        end else if (mach_code[3:2] == 2'b01) begin
            Aluop = 4'b0101;
         end
       end
@@ -70,17 +69,21 @@ case(mach_code[8:6])
   3'b100: begin //  Jump (brc_jump, jump)
      if (mach_code[5] == 1'b1) begin
         Jptr = mach_code[4:0];  // regular jump
-        Aluop = 4'b1100;
       end else begin
-        
+        if (Jen)begin
           Jptr = mach_code[4:0]; // brc_jmp
-          Aluop = 4'b1101;
-       
         end
+        end
+          
       end
+      
+    //   Jptr = mach_code[4:0]; // brc_jmp
+
+    
   	3'b101: begin // blt
       Ra = mach_code[5:3];   
       Rb = mach_code[2:0];
+    
       Aluop = 4'b0110;
       end 
     3'b110: begin // beq

@@ -8,7 +8,10 @@ module DMem(
   logic[7:0] core[256];
 
   always_ff @(posedge clk)
-    if(Wen) core[Addr] <= WDat;
+    if(Wen) begin
+      core[Addr] <= WDat;
+      $display("writing %d to addr: %d",WDat,Addr);
+    end
 
   assign Rdat = core[Addr];
 

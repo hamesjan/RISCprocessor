@@ -5,8 +5,8 @@ module InstROM(
   logic[8:0] Core[4096]; // must not exceed 2^12 entries
 
   initial 
-    $readmemb("generated_p2.txt",Core);
-
+    $readmemb("C:/Users/jal042/Desktop/RISCprocessor/tb1_done_progress/m_p2.txt",Core);
+   // $readmemb("ld_str.txt", Core);
   always_comb mach_code = Core[PC];
 
 endmodule

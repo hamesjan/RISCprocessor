@@ -3,24 +3,34 @@ module ALU(
   input [2:0] Imm,
   input [7:0] DatA,
               DatB,
+  input clk, reset,
   output logic[7:0] Rslt,
   output logic      Zero,
                     Par,
   					Jen,
-  SCo);
+  					Brc_J);
   
   logic signed [2:0] signed_imm;
+  logic SCo;
+  logic carryIn;
+
+  always_ff @(posedge clk) begin
+    if(reset) carryIn <= 0;
+    else
+      carryIn <= SCo;
+  end
 
 always_comb begin
   Rslt = 8'b00000000;
   SCo  = 1'b0;
   Jen = 1'b0;
+  Brc_J = 1'b0;
   signed_imm = 3'b000;
   
   case(Aluop)
-    4'b0000: {SCo,Rslt} = DatA ^ DatB;   // xor
-    4'b0001: {SCo,Rslt} = DatA + DatB; // add
-    4'b0010: {SCo,Rslt} = DatA - DatB;    // sub
+    4'b0000: Rslt = DatA ^ DatB;   // xor
+    4'b0001: {SCo, Rslt} = DatA + DatB + carryIn; // add
+    4'b0010: {SCo, Rslt} = DatA - DatB - carryIn;    // sub
     4'b0011: 
       if (DatA > 0) begin
           Rslt = 8'b00000000;
@@ -31,21 +41,21 @@ always_comb begin
     4'b0100:  Rslt = ~DatA;   // count bits
     4'b0101: begin                      
         Rslt = 0; 
-        for (int i = 0; i < 8; i++) begin
+      for (int i = 0; i < 9; i++) begin
           if (DatA[i] == 1) begin
             Rslt = Rslt + 1;
           end
         end
       end
-    4'b0110: if(DatA < DatB) begin 
-            Jen = 1;
+    4'b0110: if(DatA < DatB) begin //blt
+            Brc_J = 0;
     end else begin
-            Jen = 0;
+            Brc_J = 1;
     end 
-    4'b0111: if(DatA == DatB) begin 
-            Jen = 1;
+    4'b0111: if(DatA == DatB) begin  //beq
+            Brc_J = 0;
     end else begin
-            Jen = 0;
+            Brc_J = 1;
     end 
     
     4'b1000: Rslt = DatA;
@@ -58,17 +68,27 @@ always_comb begin
         end
     end
     4'b1010:
-    {SCo,Rslt} = DatA + Imm;
+    {SCo,Rslt} = DatA + Imm + carryIn;
     4'b1011:
-    {SCo,Rslt} = DatA - Imm;
-	 4'b1100: {SCo, Rslt} = DatA + Imm;
-	 4'b1101:{SCo, Rslt} = DatA + Imm;
-	 4'b1110:{SCo, Rslt} = DatA + Imm;
-	 4'b1111:{SCo, Rslt} = DatA + Imm;
+    {SCo,Rslt} = DatA - Imm - carryIn;
+	 4'b1100: begin
+       Jen = 1;
+       Brc_J = 0;
+     end
+    4'b1101: begin 
+      Jen = 1; 
+      Brc_J = 0;
+	end
+    4'b1010:
+    {SCo, Rslt} = DatA + Imm + carryIn;
+    4'b1011:
+    {SCo, Rslt} = DatA - Imm - carryIn;
 	 default: begin
 	 SCo = 1'b0;
 	 Rslt = 8'b0;
 	 Jen = 1'b0;
+     Brc_J = 0;
+
 	 end
   endcase
 end

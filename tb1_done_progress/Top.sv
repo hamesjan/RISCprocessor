@@ -23,18 +23,18 @@ module Top(
 			Addr;		 // DM address
   wire      Jen,		 // PC jump enable
             Par,         // ALU parity flag
-			SCo,         // ALU shift/carry out
             Zero,        // ALU zero flag
 			WenR,		 // RF write enable
 			WenD,		 // DM write enable
 			Ldr,		 // LOAD
-			Str;		 // STORE
+			Str,		 // STORE
+  			Brc_J;
 
 assign  DatA = RdatA;
 assign  DatB = RdatB; 
-assign  WdatR = Rslt;
-  
-assign done = PC == 58 ? 1 : 0;
+assign  WdatR = Ldr ? Rdat : Rslt;
+assign WdatD = Str ? RdatA : 8'b0;
+assign done = PC > 218 ? 1 : 0;
  
 
 JLUT JL1(
@@ -46,6 +46,7 @@ ProgCtr PC1(
   .reset,
   .Jen,
   .Jump,
+  .Brc_J,
   .PC);
 
 InstROM IR1(
@@ -85,16 +86,18 @@ ALU A1(
   .Rslt,
   .Zero,
   .Par,
-  .SCo,
   .Imm,
-  .Jen
+  .Jen,
+  .Brc_J,
+  .clk,
+  .reset
 );
 
 DMem dm(
   .clk,
   .Wen (WenD),
   .WDat(WdatD),
-  .Addr,
+  .Addr(RdatB),
   .Rdat);
 
 

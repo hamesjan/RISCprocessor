@@ -34,7 +34,7 @@ assign  DatA = RdatA;
 assign  DatB = RdatB; 
 assign  WdatR = Ldr ? Rdat : Rslt;
 assign WdatD = Str ? RdatA : 8'b0;
-assign done = PC > 218 ? 1 : 0;
+assign done = PC > 199 ? 1 : 0;
  
 
 JLUT JL1(

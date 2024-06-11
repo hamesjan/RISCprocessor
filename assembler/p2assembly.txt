@@ -1,5 +1,4 @@
-outer_loop:
-    blt r4 r1
+outer_loop: blt r4 r1
     jump #12 
     mov r1 r2
     Addi r2 #2
@@ -8,8 +7,7 @@ outer_loop:
     Addi r2 #2
     mov r2 r4
     mov r7 r2
-    inner_loop:
-        blt r4 r2   
+    inner_loop: blt r4 r2   
         jump #11
         ld r0 r1
         ld r3 r2
@@ -37,12 +35,8 @@ outer_loop:
         ld r3 r1 
         addr r0 r3
         mov r5 r3
-        addi r2 #2
         jump #7
-
-
-        left_neg:
-            addi r1 #1
+    left_neg: addi r1 #1
             ld r3 r1
             flip_bit r3
             addi r3 #1  
@@ -60,21 +54,15 @@ outer_loop:
             ld r3 r2 
             addr r0 r3 
             mov r5 r3
-            addi r2 #2
             jump #7
-
-        same_sign:
-            ld r0 r1
+        same_sign: ld r0 r1
             ld r3 r2
             beq r0 r3 
             jump #4
-
-
             blt r3 r0
             jump #6
-
             addi r2 #1
-            addr r1 #1
+            addi r1 #1
             ld r0 r1
             ld r3 r2
             sub r3 r0
@@ -86,27 +74,20 @@ outer_loop:
             sub r3 r0
             mov r3 r0
             mov r5 r3
-            addi r2 #2
-            jump #7
-            
-            equal:
-                addi r1 #1
+            jump #7          
+            equal: addi r1 #1
                 addi r2 #1
                 ld r0 r1
                 ld r3 r2
                 blt r3 r0
                 jump  #5
-                rll:
-                    sub r0 r3  
+                rll: sub r0 r3  
                     mov r0 r3
                     sub r0 r0 
                     addi r2 #1 
                     subi r1 #1  
                     jump #7
-
-
-            compare_left_greater_right:
-                addi r1 #1
+            compare_left_greater_right: addi r1 #1
                 addi r2 #1
                 ld r3 r2
                 ld r0 r1
@@ -118,10 +99,8 @@ outer_loop:
                 ld r3 r2
                 sub r0 r3
                 mov r5 r3
-                addi r2 #2
                 jump #7
-    comp_min_max:
-        mov r3 r7
+    comp_min_max: mov r3 r7
         mov r4 r3
         addi r3 #3
         addi r3 #1
@@ -131,23 +110,19 @@ outer_loop:
         mov r7 r3 
         blt r5 r0
         jump #9
-
         mov r3 r7
         mov r4 r3
         subi r3 #2
         mov r3 r4
         mov r7 r3 
-
         beq r5 r0
         jump #8
         str r0 r4
-
         mov r3 r7
         mov r4 r3
         addi r3 #1
         mov r3 r4
-        mov r7 r3
-  
+        mov r7 r3 
         str r3 r4
         mov r3 r7
         mov r4 r3
@@ -155,10 +130,7 @@ outer_loop:
         mov r3 r4
         mov r7 r3
         jump #9
-
-
-        msb_equal:
-            mov r3 r7
+       msb_equal: mov r3 r7
             mov r4 r3
             addi r3 #1
             ld r5 r3
@@ -173,15 +145,10 @@ outer_loop:
             str r3 r2
             subi r2 #1
             str r0 r2
-            addi r2 #2
             mov r2 r4
             mov r7 r2
             jump #9
-
-
-        check_max:
-
-            mov r3 r7
+        check_max:  mov r3 r7
             mov r4 r3
             ld r5 r3
             subi r3 #6
@@ -190,10 +157,8 @@ outer_loop:
             addi r2 #2
             blt r0 r5
             jump #1
-
             beq r5 r0
             jump #10
-
             mov r2 r7
             mov r4 r2
             addi r2 #6
@@ -205,21 +170,16 @@ outer_loop:
             mov r7 r2
             addi r2 #2
             jump #1
-
-            msb_equal_max:
-                mov r2 r7
+            msb_equal_max:    mov r2 r7
                 mov r4 r2
                 addi r2 #7
-
                 ld r5 r2 
                 subi r2 #7
-
                 mov r2 r4
                 mov r7 r2
                 addi r2 #2
                 blt r3 r5
                 jump #1
-
                 mov r2 r7
                 mov r4 r2
                 addi r2 #7
@@ -231,13 +191,11 @@ outer_loop:
                 mov r7 r2
                 addi r2 #2
                 jump #1
-    inner_end:
-        addi r1 #2
+    inner_end:    addi r1 #2
         mov r2 r7
         mov r4 r2
         subi r2 #2
         mov r2 r4
         mov r7 r2
         jump #0
-outer_loop_end:
-    mov r6 r5
+outer_loop_end:   mov r6 r5

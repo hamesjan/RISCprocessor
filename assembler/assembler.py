@@ -1,7 +1,8 @@
 import re
 def encode_instruction(instruction):
-
+    
     parts = instruction.split()
+
     opcode = parts[0].lower()
     
  
@@ -75,11 +76,12 @@ def assemble_code(assembly_code):
         instruction = re.sub(r'^[\t \x80-\xFF]+', '', instruction)
         if instruction:
 
-            if instruction.endswith(':'):
-                print(instruction[:-1], " starting at instruction memory: ", line_counter)
-            else:
-                machine_code.append(encode_instruction(instruction))
-                line_counter += 1
+            semi_index = instruction.find(':')
+            if semi_index != -1:
+                print(instruction[:semi_index], " starting at instruction memory: ", line_counter)
+                instruction =  re.sub(r'^[\t \x80-\xFF]+', '', instruction[semi_index + 1:])
+            machine_code.append(encode_instruction(instruction))
+            line_counter += 1
     return machine_code
 
 

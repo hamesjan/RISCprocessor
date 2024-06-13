@@ -145,6 +145,7 @@ outer_loop: blt r4 r1
             str r3 r2
             subi r2 #1
             str r0 r2
+            addi r2 #2
             mov r2 r4
             mov r7 r2
             jump #9

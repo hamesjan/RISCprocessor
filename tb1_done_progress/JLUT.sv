@@ -21,10 +21,10 @@ module JLUT(
 		6: Jump = 89; //compare_left_greater_right
 		7: Jump = 102; //comp_min_max
 		8: Jump = 132; //msb_equal
-		9: Jump = 150; //check_max
-		10: Jump = 172; //msb_equal_max
-		11: Jump = 193; //inner_end
-		12: Jump = 200; //outer_loop_end
+		9: Jump = 151; //check_max
+		10: Jump = 173; //msb_equal_max
+		11: Jump = 194; //inner_end
+		12: Jump = 201; //outer_loop_end
     
     default: Jump = 0;
   endcase 

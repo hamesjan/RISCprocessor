@@ -38,7 +38,7 @@ always_comb begin
           Rslt = 8'b00000001;
         end  
     // Sign function
-    4'b0100:  Rslt = ~DatA;   // count bits
+    4'b0100:  Rslt = ~DatA[7];   // count bits
     4'b0101: begin                      
         Rslt = 0; 
       for (int i = 0; i < 9; i++) begin

@@ -59,7 +59,7 @@ case(mach_code[8:6])
           Ra = mach_code[1:0];
           Wd = mach_code[1:0];
         if (mach_code[3:2] == 2'b00) begin // sign
-           Aluop = 4'b0011;
+           Aluop = 4'b0100;
         end else if (mach_code[3:2] == 2'b10) begin // flip bits
           Aluop = 4'b0100;
         end else if (mach_code[3:2] == 2'b01) begin // cnt bits

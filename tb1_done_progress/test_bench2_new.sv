@@ -33,6 +33,7 @@ initial begin
 
     D1.RF1.Core[1] = 0;
     D1.RF1.Core[4] = 60;
+    D1.RF1.Core[6] = 0;
 // load operands for program 1 into data memory
 // 32 double-precision operands go into data_mem [0:63]
 // first operand = {data_mem[0],data_mem[1]}  

@@ -14,6 +14,7 @@ module ALU(
   logic SCo;
   logic carryIn;
 
+
   always_ff @(posedge clk) begin
     if(reset) carryIn <= 0;
     else
@@ -22,7 +23,7 @@ module ALU(
 
 always_comb begin
   Rslt = 8'b00000000;
-  SCo  = 1'b0;
+  SCo  = 0'b0;
   Jen = 1'b0;
   Brc_J = 1'b0;
   signed_imm = 3'b000;

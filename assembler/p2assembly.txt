@@ -27,11 +27,13 @@ outer_loop: blt r4 r1
         addi r0 #0
         mov r0 r5
         addi r1 #1  
-        ld r0 r1 
+        ld r0 r1
+        subi r1 #1
+           
         addr r3 r0  
         mov r5 r0 
         mov r3 r5
-        subi r1 #1
+        
         ld r3 r1 
         addr r0 r3
         mov r5 r3
@@ -39,9 +41,9 @@ outer_loop: blt r4 r1
     left_neg: addi r1 #1
             ld r3 r1
             flip_bit r3
-            addi r3 #1  
             subi r1 #1
             ld r0 r1
+            addi r3 #1  
             flip_bit r0
             addi r0 #0 
             mov r0 r5

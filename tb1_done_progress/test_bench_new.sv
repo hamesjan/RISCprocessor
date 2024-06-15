@@ -1,5 +1,5 @@
 // program 1    CSE141L   min & max Hamming distances in double precision data pairs
-module test_bench;
+module test_bench1_new;
 
 // connections to DUT: clock, start (request), done (acknowledge) 
   bit  clk,
@@ -11,8 +11,8 @@ module test_bench;
   logic[ 4:0] Max1, Max2;		// addresses of pair w/ largest Hamming distance
   logic[15:0] Tmp[32];		    // cache of 16-bit values assembled from data_mem
 
-  DUT D1(.clk  (clk  ),	        // your design goes here
-		 .start(start),
+  Top D1(.clk  (clk  ),	        // your design goes here
+		 .reset(start),
 		 .done (done )); 
 
 always begin
@@ -34,17 +34,27 @@ initial begin
     #100ns;
 	Min = 'd16;						         // start test bench Min at max value
 	Max = 'd0;						         // start test bench Max at min value
+    
+    D1.RF1.Core[0] = 0;
+    D1.RF1.Core[1] = 0;
+    D1.RF1.Core[2] = 0;
+    D1.RF1.Core[3] = 0;
+    D1.RF1.Core[4] = 0;
+    D1.RF1.Core[5] = 2; 
+    D1.RF1.Core[6] = 32;
+    D1.RF1.Core[7] = 0;
+
     case(loop_ct)
-        0: $readmemb("test0.txt",D1.dm.core);
-	    1: $readmemb("test1.txt",D1.dm.core);
-        2: $readmemb("test2.txt",D1.dm.core);
-	    3: $readmemb("test3.txt",D1.dm.core);
-        4: $readmemb("test4.txt",D1.dm.core);
-        5: $readmemb("test5.txt",D1.dm.core);
-        6: $readmemb("test6.txt",D1.dm.core);
-	    7: $readmemb("test7.txt",D1.dm.core);
-        8: $readmemb("test8.txt",D1.dm.core);
-        9: $readmemb("test9.txt",D1.dm.core);
+        0: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test0.txt",D1.dm.core);
+	    1: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test1.txt",D1.dm.core);
+        2: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test2.txt",D1.dm.core);
+	    3: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test3.txt",D1.dm.core);
+        4: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test4.txt",D1.dm.core);
+        5: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test5.txt",D1.dm.core);
+        6: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test6.txt",D1.dm.core);
+	    7: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test7.txt",D1.dm.core);
+        8: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test8.txt",D1.dm.core);
+        9: $readmemb("H:/Documents/141L/RISCprocessor/tb1_done_progress/test9.txt",D1.dm.core);
     endcase
     for(int i=0; i<32; i++) begin
       Tmp[i] = {D1.dm.core[2*i],D1.dm.core[2*i+1]};
